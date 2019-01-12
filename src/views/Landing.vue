@@ -9,7 +9,7 @@
               <div class="info-container">
                 <h1
                   class="is-size-2 has-text-white"
-                >Intuitive and open-source customer support software</h1>
+                >Intuitive and open-source customer support platform</h1>
                 <button @click="$router.push('/home')" class="button is-success is-rounded">SIGN UP</button>
               </div>
             </div>
