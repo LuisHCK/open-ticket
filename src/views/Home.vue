@@ -1,18 +1,55 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="columns is-variable is-mobile is-multiline is-1">
+      <div class="column">
+        <info-item title="Unresolved"/>
+      </div>
+      <div class="column">
+        <info-item title="Overdue"/>
+      </div>
+      <div class="column">
+        <info-item title="Due today"/>
+      </div>
+      <div class="column">
+        <info-item title="Open"/>
+      </div>
+      <div class="column">
+        <info-item title="On hold"/>
+      </div>
+      <div class="column">
+        <info-item title="Unassigned"/>
+      </div>
+    </div>
+
+    <div class="columns is-variable is-1 is-mobile">
+      <div class="column is-half-desktop">
+        <recent-tickets/>
+      </div>
+      <div class="column is-half-desktop">
+        <today-trends/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import InfoItem from "@/components/dashboard/InfoItem.vue";
+import RecentTickets from "@/components/dashboard/RecentTickets.vue";
+import TodayTrends from "@/components/dashboard/TodayTrends.vue";
 
 export default {
-  name: 'home',
+  name: "home",
   components: {
-    HelloWorld
+    InfoItem,
+    RecentTickets,
+    TodayTrends
   }
-}
+};
 </script>
+
+<style scoped lang="scss">
+.home {
+  padding: 8px;
+}
+</style>
+
