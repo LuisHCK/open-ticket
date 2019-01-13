@@ -6,6 +6,8 @@ import './registerServiceWorker'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import '@/assets/materialdesignicons.css'
+import '@/plugins/moment.plugin'
+
 Vue.use(Buefy)
 Vue.config.productionTip = false
 

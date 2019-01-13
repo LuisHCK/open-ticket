@@ -23,9 +23,25 @@ export default new Router({
       component: Home
     },
     {
+      path: '/tickets',
+      name: 'tickets',
+      component: () => import('./views/Tickets.vue')
+    },
+    {
+      path: '/tickets/:id',
+      name: 'ticket',
+      component: () => import('./views/Ticket.vue')
+    },
+    {
+      path: '/customers',
+      name: 'customers',
+      component: () => import('./views/Customers.vue')
+    },
+    {
       path: '/about',
       name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      component: () =>
+        import(/* webpackChunkName: "about" */ './views/About.vue'),
       meta: {
         withoutSideBar: true
       }

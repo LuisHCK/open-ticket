@@ -1,10 +1,10 @@
 <template>
   <div class="side-menu">
     <ul>
-      <li class="option main">
+      <li class="option main" @click="navigate('/home')">
         <i class="mdi mdi-view-dashboard"></i>
       </li>
-      <li class="option" v-for="option in options" :key="option.id">
+      <li class="option" v-for="option in options" :key="option.id" @click="navigate(option.path)">
         <i class="mdi" :class="option.icon"></i>
       </li>
     </ul>
@@ -18,13 +18,19 @@ export default {
   data() {
     return {
       options: [
-        { action: () => {}, icon: "mdi-ticket-account" },
-        { action: () => {}, icon: "mdi-account-group" },
-        { action: () => {}, icon: "mdi-book-open" },
-        { action: () => {}, icon: "mdi-file-chart" },
-        { action: () => {}, icon: "mdi-settings" },
+        { path: "/tickets", icon: "mdi-ticket-account" },
+        { path: "/customers", icon: "mdi-account-group" },
+        { path: "/", icon: "mdi-book-open" },
+        { path: "/", icon: "mdi-file-chart" },
+        { path: "/", icon: "mdi-settings" }
       ]
     };
+  },
+
+  methods: {
+    navigate(path) {
+      this.$router.push(path);
+    }
   }
 };
 </script>
@@ -33,7 +39,7 @@ export default {
 .side-menu {
   min-width: 56px;
   min-height: 100vh;
-  position: sticky;
+  position: fixed;
   background-color: #284255;
   ul {
     li {
@@ -44,11 +50,18 @@ export default {
       align-items: center;
       height: 56px;
       color: rgb(190, 190, 190);
+      transition: 0.3s;
       i {
         font-size: 18pt;
       }
       &.main {
         background-color: rgb(41, 172, 73);
+        color: white;
+      }
+      &.option {
+        cursor: pointer;
+      }
+      &:hover {
         color: white;
       }
     }

@@ -51,6 +51,8 @@ body {
 }
 .content {
   width: 100%;
+  padding-left: 56px;
+  min-height: 100vh;
 }
 
 .panel {
@@ -59,6 +61,21 @@ body {
   border-radius: 4px;
   border: 1px solid rgb(241, 241, 241);
   width: 100%;
-  height: 100%;
+  &.is-full-height {
+    min-height: 100%;
+  }
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+}
+.is-centered-vertically {
+  align-items: center;
+}
+.user-info {
+  padding-left: 15px;
+  .user-name {
+    margin-right: 8px;
+  }
 }
 </style>

@@ -8,7 +8,10 @@
   },
   "dependencies": {
     "buefy": "^0.7.1",
+    "moment": "^2.23.0",
     "register-service-worker": "^1.5.2",
+    "tiptap": "^1.7.0",
+    "tiptap-extensions": "^1.7.0",
     "vue": "^2.5.21",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

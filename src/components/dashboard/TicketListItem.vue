@@ -4,27 +4,30 @@
     <div class="ticket-content">
       <div class="details">
         <div>
-          <span class="has-text-weight-semibold" v-text="ticket.title"/>
+          <div class="tag-list">
+            <span class="tag is-primary is-rounded" v-text="ticket.project.name"/>
+          </div>
+          <span @click="clicked()" class="has-text-weight-semibold" v-text="ticket.title"/>
           <span class="ticket-number" v-text="'#'+ticket.id"/>
         </div>
         <div>
           <i class="mdi mdi-user"/>
           <span class="user-name" v-text="ticket.user.name"/>
-          <small class="has-text-grey-light">Openned x time ago</small>
+          <small class="has-text-grey-light">Openned {{ ticket.created_at | fromNow }}</small>
         </div>
       </div>
       <div class="status">
-        <div class="priority">
+        <div class="status-item">
           <i class="mdi mdi-square-medium"/>
-          <span v-text="ticket.priority"/>
+          <small v-text="ticket.priority"/>
         </div>
-        <div class="assigned">
+        <div class="status-item">
           <i class="mdi mdi-account-box-outline"/>
-          <span v-text="ticket.assigned_to.name"/>
+          <small v-text="assignedUsers"/>
         </div>
-        <div class="status">
+        <div class="status-item">
           <i class="mdi mdi-chart-line-variant"/>
-          <span v-text="ticket.status"/>
+          <small v-text="ticket.status"/>
         </div>
       </div>
     </div>
@@ -40,9 +43,25 @@ export default {
       default: () => {
         return {
           user: {},
-          assigned_to: {}
+          assigned_to: {},
+          project: {}
         };
       }
+    }
+  },
+
+  computed: {
+    assignedUsers() {
+      let names = this.ticket.assigned_to.map(user => {
+        return user.name;
+      });
+      return names.length > 0 ? names.join(",") : "Unassigned";
+    }
+  },
+
+  methods: {
+    clicked() {
+      this.$router.push({ name: "ticket", params: { id: this.ticket.id } });
     }
   }
 };
@@ -57,7 +76,7 @@ export default {
   transition: 0.3s;
   cursor: pointer;
   &:hover {
-    background-color: rgb(248, 248, 248);
+    background-color: rgb(250, 250, 250);
   }
   .ticket-content {
     width: 100%;
@@ -72,13 +91,10 @@ export default {
         color: grey;
       }
     }
-    .status {
-      span {
+    .status-item {
+      small {
         padding-left: 8px;
       }
-    }
-    .user-name {
-      padding-right: 8px;
     }
   }
   .mdi-square-medium {
