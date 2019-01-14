@@ -1,4 +1,5 @@
-# open-ticket
+# Open Ticket
+An OpenSource customer support platform
 
 ## Project setup
 ```
