@@ -4,7 +4,14 @@
     <hr>
     <div class="form">
       <b-field custom-class="is-size-7" label="Cateogry">
-        <b-select @input="changeState($event, 'category')" size="is-small" placeholder="Select ticket category" expanded v-model="ticket.category">
+        <b-select
+          :disabled="isAdministrative"
+          @input="changeState($event, 'category')"
+          size="is-small"
+          placeholder="Select ticket category"
+          expanded
+          v-model="ticket.category"
+        >
           <option value="problem">Problem</option>
           <option value="error">Error</option>
           <option value="question">Question</option>
@@ -14,7 +21,14 @@
       </b-field>
 
       <b-field custom-class="is-size-7" label="Status">
-        <b-select @input="changeState($event, 'status')" size="is-small" placeholder="Select ticket status" expanded v-model="ticket.status">
+        <b-select
+          :disabled="isAdministrative"
+          @input="changeState($event, 'status')"
+          size="is-small"
+          placeholder="Select ticket status"
+          expanded
+          v-model="ticket.status"
+        >
           <option value="open">Open</option>
           <option value="pending">Pending</option>
           <option value="resolved">Resolved</option>
@@ -24,7 +38,14 @@
       </b-field>
 
       <b-field custom-class="is-size-7" label="Priority">
-        <b-select @input="changeState($event, 'priority')" size="is-small" placeholder="Select ticket priority" expanded v-model="ticket.priority">
+        <b-select
+          :disabled="isAdministrative"
+          @input="changeState($event, 'priority')"
+          size="is-small"
+          placeholder="Select ticket priority"
+          expanded
+          v-model="ticket.priority"
+        >
           <option value="low">Low</option>
           <option value="medium">Medium</option>
           <option value="high">High</option>
@@ -34,6 +55,7 @@
 
       <b-field custom-class="is-size-7" label="Assign to">
         <b-taginput
+          :disabled="isAdministrative"
           size="is-small"
           v-model="selectedUsers"
           :data="filteredUsers"
@@ -71,8 +93,14 @@ export default {
     return {
       users: [],
       filteredUsers: [],
-      selectedUsers: [],
+      selectedUsers: []
     };
+  },
+
+  computed: {
+    isAdministrative() {
+      return !this.$store.getters.isAdministrative;
+    }
   },
 
   methods: {
@@ -88,47 +116,48 @@ export default {
     },
 
     removeAssigned(user) {
-      this.$http.delete(`tickets/${this.ticket.id}/remove_assigned_user/`, 
-        {
+      this.$http
+        .delete(`tickets/${this.ticket.id}/remove_assigned_user/`, {
           data: {
             assigned_user: {
-            user_id: user.id,
-            ticket_id: this.ticket.id
+              user_id: user.id,
+              ticket_id: this.ticket.id
+            }
           }
-        }
-      })
-      .then(res => {
-        this.$emit('update-assigned', this.selectedUsers)
-      })
-      .catch(err => console.log(err))
+        })
+        .then(res => {
+          this.$emit("update-assigned", this.selectedUsers);
+        })
+        .catch(err => console.log(err));
     },
 
     changeState(value, field) {
-      let updatedTicket = {}
-      updatedTicket[field] = value
-      this.$http.patch(`tickets/${this.ticket.id}`, {
-        ticket: updatedTicket
-      })
-      .then(res => {
-        this.$emit('update', res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      let updatedTicket = {};
+      updatedTicket[field] = value;
+      this.$http
+        .patch(`tickets/${this.ticket.id}`, {
+          ticket: updatedTicket
+        })
+        .then(res => {
+          this.$emit("update", res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     assignUser(user) {
-      this.$http.post(`tickets/${this.ticket.id}/assign_user/`,
-        {
+      this.$http
+        .post(`tickets/${this.ticket.id}/assign_user/`, {
           assigned_user: {
-          user_id: user.id,
-          ticket_id: this.ticket.id
-        }
-      })
-      .then(res => {
-        this.$emit('update-assigned', this.selectedUsers)
-      })
-      .catch(err => console.log(err))
+            user_id: user.id,
+            ticket_id: this.ticket.id
+          }
+        })
+        .then(res => {
+          this.$emit("update-assigned", this.selectedUsers);
+        })
+        .catch(err => console.log(err));
     },
 
     getFilteredUsers(text) {
