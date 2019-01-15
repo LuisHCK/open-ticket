@@ -9,6 +9,8 @@ export default new Vuex.Store({
       name: 'Luis Centeno',
       avatar: undefined
     },
+    authToken: undefined,
+    expToken: undefined,
     tickets: [
       {
         id: 1,
@@ -20,7 +22,7 @@ export default new Vuex.Store({
           name: 'Jhon Doe',
           avatar: require('@/assets/user-icon.png')
         },
-        assigned_to: [{ name: 'Luis Centeno' }],
+        assigned_users: [{ name: 'Luis Centeno' }],
         description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis urna et suscipit fringilla. Morbi ut viverra sapien, efficitur congue odio. Proin eu ante vulputate, imperdiet eros pharetra,',
         due_date: '2019-01-12T04:52:34.382Z',
@@ -47,7 +49,7 @@ export default new Vuex.Store({
           name: 'Jhon Doe',
           avatar: require('@/assets/user-icon.png')
         },
-        assigned_to: [{ name: 'Luis Centeno' }],
+        assigned_users: [{ name: 'Luis Centeno' }],
         description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis urna et suscipit fringilla. Morbi ut viverra sapien, efficitur congue odio. Proin eu ante vulputate, imperdiet eros pharetra,',
         due_date: '2019-01-12T04:52:34.382Z',
@@ -80,7 +82,56 @@ export default new Vuex.Store({
 
     updateTicket(state, ticket) {
       state.ticket = [...state.tickets.filter(t => t.id !== ticket.id), ticket]
+    },
+
+    setExpToken(state, expiration) {
+      state.expToken = new Date(expiration * 1000)
+    },
+
+    setAuthToken(state, token) {
+      state.authToken = token
+    },
+
+    setUser(state, user) {
+      state.currentUser = user
     }
   },
-  actions: {}
+  actions: {},
+  getters: {
+    isLogged: state => {
+      if (
+        state.currentUser !== undefined &&
+        state.currentUser.id &&
+        state.authToken !== ''
+      ) {
+        return true
+      } else {
+        return false
+      }
+    },
+    getToken: state => {
+      return state.authToken
+    },
+
+    getExpDate: state => {
+      return state.expToken ? new Date(state.expToken) : undefined
+    },
+
+    getRoles: state => {
+      if (state.currentUser.id) {
+        return state.currentUser.roles.map(r => r.name)
+      }
+      return []
+    },
+
+    isAdministrative: state => {
+      if (state.currentUser.id) {
+        const adminRoles = ['admin', 'moderator']
+        const userRoles = state.currentUser.roles.map(r => r.name)
+        if (userRoles.some(r => adminRoles.includes(r))) {
+          return true
+        }
+      }
+    }
+  }
 })

@@ -7,6 +7,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import '@/assets/materialdesignicons.css'
 import '@/plugins/moment.plugin'
+import '@/plugins/axios.plugin'
 import '@/assets/main.scss'
 
 Vue.use(Buefy)

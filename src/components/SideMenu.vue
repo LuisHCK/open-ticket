@@ -1,7 +1,7 @@
 <template>
   <div class="side-menu">
     <ul>
-      <li class="option main" @click="navigate('/home')">
+      <li class="option main" @click="navigate(homepath)">
         <i class="mdi mdi-view-dashboard"></i>
       </li>
       <li class="option" v-for="option in options" :key="option.id" @click="navigate(option.path)">
@@ -12,11 +12,17 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "side-menu",
 
+  computed: {
+    ...mapState(["currentUser"])
+  },
+
   data() {
     return {
+      homepath: "/home",
       options: [
         { path: "/tickets", icon: "mdi-ticket-account" },
         { path: "/customers", icon: "mdi-account-group" },
@@ -30,6 +36,14 @@ export default {
   methods: {
     navigate(path) {
       this.$router.push(path);
+    }
+  },
+
+  created() {
+    const roles = ["admin", "moderator"];
+    if (!this.$store.getters.getRoles.some(r => roles.includes(r))) {
+      this.options = [{ path: "/tickets", icon: "mdi-ticket-account" }];
+      this.homepath = "/customer_dashboard";
     }
   }
 };

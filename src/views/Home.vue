@@ -23,7 +23,7 @@
 
     <div class="columns is-variable is-1 is-mobile">
       <div class="column is-half-desktop">
-        <recent-tickets/>
+        <recent-tickets :tickets="tickets"/>
       </div>
       <div class="column is-half-desktop">
         <today-trends/>
@@ -49,15 +49,28 @@ export default {
 
   data() {
     return {
-      dashboardSummary: {}
+      dashboardSummary: {},
+      tickets: []
     };
   },
 
   computed: {
-    ...mapState(["tickets"])
+    ...mapState(["currentUser"])
   },
 
   methods: {
+    getTickets() {
+      this.$http
+        .get("tickets")
+        .then(res => {
+          this.tickets = res.data;
+          this.buildSummary();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
     buildSummary() {
       this.dashboardSummary = {
         unresolved: this.tickets.filter(t => t.status !== "resolved").length,
@@ -69,13 +82,13 @@ export default {
         ).length,
         open: this.tickets.filter(t => t.status == "open").length,
         onHold: this.tickets.filter(t => t.status == "waiting-customer").length,
-        unassigned: this.tickets.filter(t => t.assigned_to.length < 1).length
+        unassigned: this.tickets.filter(t => t.assigned_users.length < 1).length
       };
     }
   },
 
   mounted() {
-    this.buildSummary();
+    this.getTickets();
   }
 };
 </script>

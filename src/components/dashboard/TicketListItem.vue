@@ -1,24 +1,25 @@
 <template>
   <li class="ticket-list-item">
-    <img class="user-avatar" :src="ticket.user.avatar" :alt="ticket.user.name">
+    <avatar :img="ticket.user.avatar" :alt="ticket.user.full_name"/>
     <div class="ticket-content">
       <div class="details">
         <div>
-          <div class="tag-list">
+          <div class="tag-list tags">
             <span class="tag is-primary is-rounded" v-text="ticket.project.name"/>
+            <span class="tag is-info is-rounded" v-text="ticket.category" />
           </div>
           <span @click="clicked()" class="has-text-weight-semibold" v-text="ticket.title"/>
           <span class="ticket-number" v-text="'#'+ticket.id"/>
         </div>
         <div>
           <i class="mdi mdi-user"/>
-          <span class="user-name" v-text="ticket.user.name"/>
+          <span class="user-name" v-text="ticket.user.full_name"/>
           <small class="has-text-grey-light">Openned {{ ticket.created_at | fromNow }}</small>
         </div>
       </div>
       <div class="status">
         <div class="status-item">
-          <i class="mdi mdi-square-medium"/>
+          <i class="mdi mdi-square" :class="ticket.priority"/>
           <small v-text="ticket.priority"/>
         </div>
         <div class="status-item">
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+import Avatar from "@/components/Avatar.vue";
 export default {
   name: "ticket-list-item",
   props: {
@@ -43,17 +45,21 @@ export default {
       default: () => {
         return {
           user: {},
-          assigned_to: {},
+          assigned_users: {},
           project: {}
         };
       }
     }
   },
 
+  components: {
+    Avatar
+  },
+
   computed: {
     assignedUsers() {
-      let names = this.ticket.assigned_to.map(user => {
-        return user.name;
+      let names = this.ticket.assigned_users.map(assigned => {
+        return assigned.user.first_name;
       });
       return names.length > 0 ? names.join(",") : "Unassigned";
     }
@@ -90,6 +96,12 @@ export default {
         padding-left: 10px;
         color: grey;
       }
+      .user-name {
+        padding-right: 6px;
+      }
+      .tag-list {
+        margin-bottom: 0px;
+      }
     }
     .status-item {
       small {
@@ -97,8 +109,19 @@ export default {
       }
     }
   }
-  .mdi-square-medium {
-    color: green;
+  .mdi-square {
+    &.low {
+      color: green;
+    }
+    &.medium {
+      color: blue;
+    }
+    &.high {
+      color: yellow;
+    }
+    &.urgent {
+      color: red;
+    }
   }
   img.user-avatar {
     width: 44px;

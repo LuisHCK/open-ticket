@@ -4,7 +4,7 @@ $color-grey: #dddddd;
 
 .editor {
   position: relative;
-  margin: 2%;
+  padding: 2%;
   min-height: 320px;
 
   &__content {
@@ -123,5 +123,8 @@ $color-grey: #dddddd;
   }
   [contenteditable]:focus {
     outline: 0px solid transparent;
+  }
+  [contenteditable] {
+    padding: 1%;
   }
 }

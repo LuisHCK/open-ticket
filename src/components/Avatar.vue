@@ -16,7 +16,11 @@ export default {
 
   methods: {
     capitalize() {
-      return this.alt.split("")[0];
+      if (this.alt) {
+        return this.alt.split("")[0];
+      } else {
+        return "?";
+      }
     }
   }
 };

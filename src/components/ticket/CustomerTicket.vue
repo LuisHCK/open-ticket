@@ -2,11 +2,11 @@
   <div class="panel">
     <div class="panel-header is-flex">
       <div class="is-flex is-centered-vertically">
-        <img :src="ticket.user.avatar" alt class="avatar">
+        <avatar :img="ticket.user.avatar" :alt="ticket.user.first_name" class="avatar"/>
         <div class="user-info">
           <div class="is-size-6 has-text-weight-semibold" v-text="ticket.title"/>
           <div>
-            <small class="user-name" v-text="ticket.user.name"/>
+            <small class="user-name" v-text="ticket.user.full_name"/>
             <small class="has-text-grey">open a ticket</small>
           </div>
         </div>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <hr>
-    <div class="message-area">{{ticket.description}}</div>
+    <div class="message-area" v-html="ticket.description"/>
   </div>
 </template>
 

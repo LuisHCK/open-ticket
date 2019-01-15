@@ -3,28 +3,38 @@
     <div class="columns is-mobile is-variable is-1">
       <div class="column is-two-thirds-desktop">
         <!-- Time details -->
-        <ticket-time-details :ticket="ticket"/>
+        <ticket-time-details v-if="ticket.id" :ticket="ticket"/>
         <!-- Customer ticket -->
-        <customer-ticket :ticket="ticket"/>
+        <customer-ticket v-if="ticket.id" :ticket="ticket"/>
         <!-- Replies -->
         <reply v-for="reply in ticket.replies" :key="reply.id" :reply="reply" @select="editReply"/>
 
         <!-- Ticket actions -->
-        <ticket-actions :ticket="ticket" @toggle-reply="showReplyForm=!showReplyForm"/>
+        <ticket-actions
+          v-if="ticket.id"
+          :ticket="ticket"
+          @toggle-reply="showReplyForm=!showReplyForm"
+        />
 
         <!-- Ticket response form -->
         <ticket-reply-form
           :ticket="ticket"
           :reply="selectedReply"
           v-if="showReplyForm"
-          @submit="showReplyForm=false"
+          @submit="submitReply"
           @cancel="cancelReply()"
         />
       </div>
 
       <div class="column is-one-third-desktop">
         <!-- Ticket options -->
-        <ticket-options class="is-full-height" :ticket="ticket"/>
+        <ticket-options
+          v-if="ticket.id"
+          class="is-full-height"
+          :ticket="ticket"
+          @update="ticket=$event"
+          @update-assigned="ticket.assigned_users=$event"
+        />
       </div>
     </div>
   </div>
@@ -67,7 +77,14 @@ export default {
 
   methods: {
     getTicket(id) {
-      this.ticket = this.tickets.find(ticket => ticket.id == id) || {};
+      this.$http
+        .get(`tickets/${id}`)
+        .then(res => {
+          this.ticket = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     cancelReply() {
@@ -78,6 +95,17 @@ export default {
     editReply(reply) {
       this.selectedReply = reply;
       this.showReplyForm = true;
+    },
+
+    submitReply(data) {
+      if (data.update) {
+        let reply = this.ticket.replies.find(t => t.id == data.reply.id)
+        reply = data.reply
+      } else {
+        this.ticket.replies.push(data.reply)        
+      }
+      this.selectedReply = {}
+      this.showReplyForm = false
     }
   },
 

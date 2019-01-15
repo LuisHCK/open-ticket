@@ -36,7 +36,7 @@ export default {
 
 <style scoped lang="scss">
 #landing-page {
-  background-color: #8a8deeff;
+  background-color: #8a8dee;
   width: 100%;
   min-height: 100vh;
 

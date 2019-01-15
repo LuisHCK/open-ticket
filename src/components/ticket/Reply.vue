@@ -2,10 +2,10 @@
   <div class="ticket-reply panel">
     <div class="panel-header is-flex">
       <div class="is-flex is-centered-vertically">
-        <avatar :img="reply.user.avatar" :alt="reply.user.name"/>
+        <avatar :img="reply.user.avatar" :alt="reply.user.full_name || reply.user.first_name"/>
         <div class="user-info">
           <div>
-            <small class="user-name" v-text="reply.user.name"/>
+            <small class="user-name" v-text="reply.user.full_name || `${reply.user.first_name} ${reply.user.last_name}`"/>
             <small class="has-text-grey">replied</small>
           </div>
         </div>

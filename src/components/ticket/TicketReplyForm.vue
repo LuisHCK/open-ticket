@@ -1,11 +1,11 @@
 <template>
   <div class="ticket-reply-form panel" id="editor__content">
     <div class="is-flex is-centered-vertically">
-      <avatar :img="ticket.user.avatar" :alt="ticket.user.name"/>
+      <avatar :img="ticket.user.avatar" :alt="ticket.user.full_name"/>
       <div class="user-info">
         <div>
           <small class="has-text-grey">Reply to</small>
-          <small class="user-name" v-text="ticket.user.name"/>
+          <small class="user-name" v-text="ticket.user.full_name"/>
         </div>
       </div>
     </div>
@@ -203,29 +203,62 @@ export default {
     submitReply() {
       if (this.reply.id) {
         this.reply.description = this.ticketRawHtml;
-        this.$store.commit("updateTicketReply", this.reply);
+        this.updateReply(this.ticketRawHtml)        
       } else {
-        const reply = {
-          id: Math.floor(Math.random() * 999 + 1),
-          ticket_id: this.ticket.id,
-          user: { name: "Luis Centeno" },
-          created_at: new Date().toISOString(),
-          description: this.ticketRawHtml
-        };
-        this.$store.commit("addTickedReply", reply);
+        if (this.ticketRawHtml) {
+          this.createReply(this.ticketRawHtml)        
+        } else {
+          return this.notify('Please write a reply', 'is-warning')
+        }
       }
+    },
 
-      this.$emit("submit");
-      this.editor.clearContent(true);
+    createReply(description) {
+      console.log(description)
+      this.$http.post(`tickets/${this.ticket.id}/replies`, { reply: {
+        description: description
+      }})
+      .then(res => {
+        this.notify('Your reply was sent')
+        this.$emit('submit', {reply: res.data})
+        this.editor.clearContent(true);
+      })
+      .catch(err => {
+        this.notify('An error ocurred', 'is-danger')
+        console.log(err)
+      })
+    },
+
+    updateReply(description) {
+      this.$http.patch(`tickets/${this.ticket.id}/replies/${this.reply.id}`, { reply: {
+        description: description
+      }})
+      .then(res => {
+        this.notify('Your reply was updated')
+        this.$emit('submit', {reply: res.data, update: true})
+      })
+      .catch(err => {
+        this.notify('An error ocurred', 'is-danger')
+        console.log(err)
+      })
     },
 
     cancelReply() {
       this.$emit("cancel");
+    },
+
+    notify(message, type='is-success'){
+      this.$toast.open({
+        duration: 5000,
+        message: message,
+        position: 'is-top-right',
+        type: type
+      })
     }
   },
 
   beforeMount() {
-    let defaultString = `<p>Hi ${this.ticket.user.name},</p><p></p>`;
+    let defaultString = `<p>Hi ${this.ticket.user.full_name},</p><p></p>`;
 
     this.editor = new Editor({
       content: this.reply.description ? this.reply.description : defaultString,
