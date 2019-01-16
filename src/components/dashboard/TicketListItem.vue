@@ -5,8 +5,8 @@
       <div class="details">
         <div>
           <div class="tag-list tags">
-            <span class="tag is-primary is-rounded" v-text="ticket.project.name"/>
-            <span class="tag is-info is-rounded" v-text="ticket.category" />
+            <span class="tag is-small is-primary is-rounded" v-text="ticket.project.name"/>
+            <span class="tag is-small is-rounded" :class="categoryTagClass" v-text="ticket.category" />
           </div>
           <span @click="clicked()" class="has-text-weight-semibold" v-text="ticket.title"/>
           <span class="ticket-number" v-text="'#'+ticket.id"/>
@@ -62,6 +62,23 @@ export default {
         return assigned.user.first_name;
       });
       return names.length > 0 ? names.join(",") : "Unassigned";
+    },
+
+    categoryTagClass() {
+      switch(this.ticket.category) {
+        case 'problem':
+          return 'is-warning'
+        case 'error':
+          return 'is-danger'
+        case 'question':
+          return 'is-info'
+        case 'bug_report':
+          return 'is-warning'
+        case 'feature_request':
+          return 'is-primary'
+        default:
+          return 'is-white'
+      }
     }
   },
 
@@ -79,7 +96,7 @@ export default {
   align-items: center;
   border-bottom: 1px solid rgb(224, 224, 224);
   padding-left: 15px;
-  transition: 0.3s;
+  transition: all 0.6s;
   cursor: pointer;
   &:hover {
     background-color: rgb(250, 250, 250);
@@ -102,6 +119,9 @@ export default {
       .tag-list {
         margin-bottom: 0px;
       }
+    }
+    .status {
+      width: 15%;
     }
     .status-item {
       small {

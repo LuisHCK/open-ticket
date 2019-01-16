@@ -99,6 +99,13 @@
         >
           <i class="mdi mdi-code-braces"/>
         </button>
+
+        <button
+            class="menubar__button button is-white"
+            @click="showImagePrompt(commands.image)"
+          >
+            <i class="mdi mdi-image" />
+        </button>
         
         <button class="menubar__button button is-white" @click="commands.undo">
           <i class="mdi mdi-undo"/>
@@ -133,7 +140,8 @@ import {
   Link,
   Strike,
   Underline,
-  History
+  History,
+  Image
 } from "tiptap-extensions";
 
 export default {
@@ -170,12 +178,22 @@ export default {
         new Link(),
         new Strike(),
         new Underline(),
-        new History()
+        new History(),
+        new Image(),
       ],
       onUpdate: ({ getHTML }) => {
         this.$emit("input", getHTML());
       }
     });
+  },
+
+  methods: {
+    showImagePrompt(command) {
+      const src = prompt('Enter the url of your image here')
+      if (src !== null) {
+        command({ src })
+      }
+    }
   },
 
   mounted() {

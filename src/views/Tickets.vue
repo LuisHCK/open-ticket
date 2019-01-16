@@ -1,16 +1,18 @@
 <template>
-  <div class="tickets-page">
-    <div class="columns is-mobile is-variable is-1">
-      <div class="column is-three-quarters-desktop">
+  <div class="tickets-page page">
+    <div class="columns is-mobile is-variable is-1 is-multiline">
+      <div class="column is-two-thirds-desktop is-full-mobile">
         <div class="ticket-list panel">
           <div class="is-size-6 has-text-weight-semibold">Ticket List</div>
           <template v-if="tickets.length">
-            <ticket-list-item
-              v-for="ticket in tickets"
-              :key="ticket.id + 't'"
-              :ticket="ticket"
-              @showTicket="showTicket(ticket.id)"
-            />
+            <transition-group name="list" tag="p">
+              <ticket-list-item
+                v-for="ticket in tickets"
+                :key="ticket.id + 't'"
+                :ticket="ticket"
+                @showTicket="showTicket(ticket.id)"
+              />
+            </transition-group>
           </template>
           <template v-else>
             <b-message
@@ -37,8 +39,8 @@
         </div>
       </div>
 
-      <div class="column is-one-quarter-desktop">
-        <ticket-filter-options @submit="tickets=$event"/>
+      <div class="column is-one-third-desktop is-full-mobile">
+        <ticket-filter-options v-model="tickets"/>
       </div>
     </div>
   </div>
@@ -87,7 +89,8 @@ export default {
     },
 
     addTicket(ticket) {
-      this.tickets.push(ticket);
+      this.tickets.unshift(ticket);
+      this.showTicketForm = false
     }
   },
 
@@ -102,5 +105,12 @@ export default {
 .tickets-page {
   padding: 8px;
   height: 100%;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 0.7s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(20px);
 }
 </style>

@@ -28,7 +28,13 @@
     </div>
     <h2 class="is-size-7">Describe the incident</h2>
     <editor class="bordered" @input="description=$event"></editor>
+    
     <br>
+
+    <file-drop v-model="screenshots" accept="image/*" />
+    
+    <br>
+    
     <div class="buttons">
       <button type="submit" class="button is-success">Submit</button>
       <button class="button is-white" @click="$emit('cancel')">Cancel</button>
@@ -38,11 +44,13 @@
 
 <script>
 import Editor from "@/components/Editor.vue";
+import FileDrop from "@/components/forms/FileDrop.vue";
 export default {
   name: "ticket-form",
 
   components: {
-    Editor
+    Editor,
+    FileDrop
   },
 
   props: {
@@ -62,24 +70,35 @@ export default {
       category: undefined,
       title: undefined,
       project_id: undefined,
-      projects: []
+      projects: [],
+      screenshots: []
     };
   },
 
   methods: {
     submitTicket() {
       this.$http
-        .post("tickets", {
-          description: this.description,
-          category: this.category,
-          title: this.title,
-          project_id: this.project_id
-        })
+        .post("tickets", this.buildTicketPayload())
         .then(res => {
           this.$emit("submit", res.data);
           this.notify("Your ticket was submited");
         })
         .catch(err => console.log(err));
+    },
+
+    buildTicketPayload() {
+      const formData = new FormData()
+      formData.append('description', this.description)
+      formData.append('category', this.category)
+      formData.append('title', this.title)
+      formData.append('project_id', this.project_id)
+      // Append screenshots if any
+      if (this.screenshots.length) {
+        this.screenshots.map(file => {
+          formData.append('screenshots[]', file)
+        })
+      }
+      return formData
     },
 
     notify(message, type = "is-success") {

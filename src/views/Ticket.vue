@@ -1,5 +1,5 @@
 <template>
-  <div class="ticket-page">
+  <div class="ticket-page page">
     <div class="columns is-mobile is-variable is-1">
       <div class="column is-two-thirds-desktop">
         <!-- Time details -->

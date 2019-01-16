@@ -17,6 +17,24 @@
     </div>
     <hr>
     <div class="message-area" v-html="ticket.description"/>
+
+    <div class="screenshots-container" v-if="ticket.screenshots.length">
+      <hr>
+      <h3 class="is-size-7">Screenshots</h3>
+      <div class="screenshots-thumbs">
+        <img 
+          v-for="(screenshot, i) in ticket.screenshots"
+          :key="'scr'+i"
+          :src="screenshot.thumb.url"
+          @click="showImage(screenshot.url)">
+      </div>
+    </div>
+
+    <b-modal :active.sync="isImageModalActive">
+      <a :href="selectedImage" target="_blank"  class="image">
+        <img :src="selectedImage">
+      </a>
+    </b-modal>
   </div>
 </template>
 
@@ -28,6 +46,14 @@ export default {
   components: {
     Avatar
   },
+
+  data() {
+    return {
+      isImageModalActive: false,
+      selectedImage: undefined
+    }
+  },
+
   props: {
     ticket: {
       type: Object,
@@ -37,6 +63,13 @@ export default {
         };
       }
     }
+  },
+
+  methods: {
+    showImage(url) {
+      this.isImageModalActive = true
+      this.selectedImage = url
+    }
   }
 };
 </script>
@@ -45,5 +78,13 @@ export default {
 .panel-header {
   align-items: center;
   justify-content: space-between;
+}
+.screenshots-thumbs {
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  img {
+    margin: 3px;
+  }
 }
 </style>
