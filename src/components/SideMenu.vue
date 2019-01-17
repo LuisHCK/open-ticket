@@ -25,10 +25,10 @@ export default {
       homepath: "/home",
       options: [
         { path: "/tickets", icon: "mdi-ticket-account" },
-        { path: "/customers", icon: "mdi-account-group" },
-        { path: "/", icon: "mdi-book-open" },
-        { path: "/", icon: "mdi-file-chart" },
-        { path: "/", icon: "mdi-settings" }
+        { path: "/people", icon: "mdi-account-group" },
+        { path: "/knowledge-base", icon: "mdi-book-open" },
+        //{ path: "/", icon: "mdi-file-chart" },
+        { path: "/settings", icon: "mdi-settings" }
       ]
     };
   },

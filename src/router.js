@@ -43,9 +43,9 @@ const router = new Router({
       }
     },
     {
-      path: '/customers',
-      name: 'customers',
-      component: () => import('./views/Customers.vue'),
+      path: '/people',
+      name: 'people',
+      component: () => import('./views/People.vue'),
       meta: { requiresAuth: true, rolesRequired: ['admin', 'moderator'] }
     },
     {
@@ -54,6 +54,15 @@ const router = new Router({
       component: () => import('./views/About.vue'),
       meta: {
         withoutSideBar: true
+      }
+    },
+    {
+      path: '/knowledge-base',
+      name: 'knowledge-base',
+      component: () => import('./views/KnowledgeBase.vue'),
+      meta: {
+        requiresAuth: true,
+        rolesRequired: ['admin', 'moderator', 'customer']
       }
     },
     {

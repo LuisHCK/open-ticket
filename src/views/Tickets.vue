@@ -4,6 +4,7 @@
       <div class="column is-two-thirds-desktop is-full-mobile">
         <div class="ticket-list panel">
           <div class="is-size-6 has-text-weight-semibold">Ticket List</div>
+          <br>
           <template v-if="tickets.length">
             <transition-group name="list" tag="p">
               <ticket-list-item

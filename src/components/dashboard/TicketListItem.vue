@@ -121,7 +121,7 @@ export default {
       }
     }
     .status {
-      width: 15%;
+      width: 20%;
     }
     .status-item {
       small {

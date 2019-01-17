@@ -13,6 +13,7 @@
         <ticket-actions
           v-if="ticket.id"
           :ticket="ticket"
+          :archive="false"
           @toggle-reply="showReplyForm=!showReplyForm"
         />
 

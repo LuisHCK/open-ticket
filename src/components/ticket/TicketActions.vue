@@ -8,7 +8,7 @@
         <span>Reply</span>
       </button>
       
-      <button class="button is-warning">
+      <button v-if="archive" class="button is-warning">
         <span class="icon is-small">
           <i class="mdi mdi-archive"></i>
         </span>
@@ -30,7 +30,8 @@ export default {
           user: {}
         };
       }
-    }
+    },
+    archive: Boolean
   },
 
   methods: {
